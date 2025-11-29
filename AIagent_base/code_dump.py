@@ -115,3 +115,32 @@ for i, (start, end, title) in enumerate(headings):
     sections.append((title, section_body))
 # sections is list of (heading, content)
 print(sections[:3])  # Print first 3 sections to verify
+
+#Breaking content into smaller chunks for processing
+def chunk_by_headings(data, max_chunk_size=500):
+    chunks = []
+    for section in data:
+        heading = section["heading"]
+        content = section["content"].split()
+        for i in range(0, len(content), max_chunk_size):
+            chunk = " ".join(content[i:i + max_chunk_size])
+            chunks.append(f"{heading}\n{chunk}")
+    return chunks
+
+# Using OpenAI cloud model for generating response
+user_query = "What factors contribute to stock market volatility?"
+from openai import OpenAI
+
+def get_answer_fromcloud (context, query, openai_api_key):
+    client = OpenAI(api_key=openai_api_key)
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant that answers questions based on provided context only."},
+        {"role": "user", "content": f"Context: {context}\n\nQuestion: {query}\nAnswer:"}
+    ]
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+        max_tokens=300,
+        temperature=0.7
+    )
+    return response.choices[0].message.content.strip()
