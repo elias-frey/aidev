@@ -2,9 +2,9 @@
 import os
 from dotenv import load_dotenv
 import requests
-# Load environment variables from .env
+# Load .env file into environment
 load_dotenv()
-# Get your OpenAI API key from environment
+# Reads from from environment
 openai_api_key = os.getenv("OPENAI_API_KEY")
 groq_api_key = os.getenv("GROQ_API_KEY")
 pdf_path = os.getenv("DATA_PATH")  # Path to your PDF file from .env file
